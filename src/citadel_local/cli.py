@@ -1,12 +1,12 @@
 import argparse
 from pathlib import Path
-from redteam_local.repo_scan.file_walk import collect_files
-from redteam_local.repo_scan.inventory import inventory_repo
-from redteam_local.detectors import run_detectors
-from redteam_local.reporting.report_json import write_findings_json
-from redteam_local.reporting.report_md import write_report_md
-from redteam_local.llm.council import run_council
-from redteam_local.config import load_config
+from citadel_local.repo_scan.file_walk import collect_files
+from citadel_local.repo_scan.inventory import inventory_repo
+from citadel_local.detectors import run_detectors
+from citadel_local.reporting.report_json import write_findings_json
+from citadel_local.reporting.report_md import write_report_md
+from citadel_local.llm.council import run_council
+from citadel_local.config import load_config
 
 def cmd_scan(args: argparse.Namespace) -> int:
     repo = Path(args.path).resolve()
@@ -32,13 +32,13 @@ def cmd_scan(args: argparse.Namespace) -> int:
     return 0
 
 def main() -> None:
-    p = argparse.ArgumentParser(prog="rtl")
+    p = argparse.ArgumentParser(prog="citadel")
     sub = p.add_subparsers(dest="cmd", required=True)
 
     scan = sub.add_parser("scan", help="Scan a repo folder")
     scan.add_argument("path")
     scan.add_argument("--out", default="out")
-    scan.add_argument("--config", default=".redteam-local.yaml")
+    scan.add_argument("--config", default=".citadel-local.yaml")
     scan.set_defaults(func=cmd_scan)
 
     # Stubs for v1 roadmap
@@ -46,13 +46,13 @@ def main() -> None:
     diff.add_argument("path")
     diff.add_argument("--base", default="origin/main")
     diff.add_argument("--out", default="out")
-    diff.add_argument("--config", default=".redteam-local.yaml")
+    diff.add_argument("--config", default=".citadel-local.yaml")
     diff.set_defaults(func=lambda a: (print("diff: stub (implement git diff file set)"), 0)[1])
 
     baseline = sub.add_parser("baseline", help="Record baseline findings (stub)")
     baseline.add_argument("path")
     baseline.add_argument("--out", default="baseline.json")
-    baseline.add_argument("--config", default=".redteam-local.yaml")
+    baseline.add_argument("--config", default=".citadel-local.yaml")
     baseline.set_defaults(func=lambda a: (print("baseline: stub (write findings as baseline)"), 0)[1])
 
     report = sub.add_parser("report", help="Render markdown report from findings.json (stub)")

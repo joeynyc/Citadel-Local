@@ -46,6 +46,6 @@ Detectors provide grounded evidence. Models provide:
 This avoids the classic failure mode: “LLM guessed a vulnerability without proof.”
 
 ## Performance tips
-- Scan only changed files in CI (`rtl diff`)
+- Scan only changed files in CI (`citadel diff`)
 - Cache LLM outputs by `{file_hash}:{finding_id}:{model}:{prompt_version}`
 - Limit context to the smallest relevant function + call sites

@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-RedTeam Local is a **defensive**, offline-first Python security auditor that scans codebases for vulnerabilities (secrets, injection patterns, insecure crypto) and produces remediation guidance using local Ollama models. It does **not** generate exploit payloads or offensive instructions.
+Citadel Local is a **defensive**, offline-first Python security auditor that scans codebases for vulnerabilities (secrets, injection patterns, insecure crypto) and produces remediation guidance using local Ollama models. It does **not** generate exploit payloads or offensive instructions.
 
 ## Commands
 
@@ -22,7 +22,7 @@ ruff check src/ tests/
 ruff format src/ tests/
 
 # Scan a repository
-rtl scan /path/to/repo --out out/ --config .redteam-local.yaml
+citadel scan /path/to/repo --out out/ --config .citadel-local.yaml
 ```
 
 ## Architecture
@@ -39,10 +39,10 @@ CLI (cli.py) → Config (config.py)
 
 **Key design principle: "Evidence first, models second."** Deterministic detectors produce candidate findings with grounded evidence. LLM models only judge these evidence bundles — they never free-scan the repo.
 
-### Source layout (`src/redteam_local/`)
+### Source layout (`src/citadel_local/`)
 
 - **cli.py** — Entry point. Subcommands: `scan`, `diff` (stub), `baseline` (stub), `report` (stub).
-- **config.py** — Loads `.redteam-local.yaml`, merges with defaults.
+- **config.py** — Loads `.citadel-local.yaml`, merges with defaults.
 - **repo_scan/** — `file_walk.py` collects files (respects ignore patterns, max file size). `inventory.py` detects repo metadata.
 - **detectors/** — Rule-based scanners. Each returns `list[dict]` of findings. Orchestrated by `detectors/__init__.py:run_detectors()`.
   - `secrets.py` — Regex + Shannon entropy for credentials/keys.
@@ -57,14 +57,14 @@ YAML-based rules in `rules/`: `insecure_patterns.yaml` (injection/crypto pattern
 
 ### Adding a new detector
 
-1. Create a module in `src/redteam_local/detectors/`
+1. Create a module in `src/citadel_local/detectors/`
 2. Register it in `detectors/__init__.py` (add the scan function to the `run_detectors` loop)
 3. Add rule IDs in `rules/*.yaml`
 4. Add test cases in `tests/`
 
 ## Configuration
 
-Config file: `.redteam-local.yaml` (copy from `.redteam-local.example.yaml`). Key settings:
+Config file: `.citadel-local.yaml` (copy from `.citadel-local.example.yaml`). Key settings:
 
 - `ignore` — directories to skip (node_modules, .git, vendor, etc.)
 - `max_file_mb` — max file size to scan (default: 2)

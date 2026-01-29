@@ -1,4 +1,4 @@
-# RedTeam Local (offline repo security auditor)
+# Citadel Local (offline repo security auditor)
 
 Local-first, open-source repo scanner that flags common security risks (secrets, injection patterns, authz footguns, insecure crypto, CI/CD misconfig) and produces actionable remediation guidance using **Ollama** models.
 
@@ -19,12 +19,12 @@ pip install -e .
 
 ### 3) Create a config
 ```bash
-cp .redteam-local.example.yaml .redteam-local.yaml
+cp .citadel-local.example.yaml .citadel-local.yaml
 ```
 
 ### 4) Scan a repo
 ```bash
-rtl scan /path/to/repo
+citadel scan /path/to/repo
 ```
 
 Outputs:
@@ -40,10 +40,10 @@ Outputs:
 See: `docs/ARCHITECTURE.md`
 
 ## Commands
-- `rtl scan <path>`: scan a repo folder
-- `rtl diff <path>`: scan only changed files vs git base (PR-friendly)
-- `rtl baseline <path>`: record current findings as accepted baseline
-- `rtl report <findings.json>`: render markdown report from JSON
+- `citadel scan <path>`: scan a repo folder
+- `citadel diff <path>`: scan only changed files vs git base (PR-friendly)
+- `citadel baseline <path>`: record current findings as accepted baseline
+- `citadel report <findings.json>`: render markdown report from JSON
 
 ## Safety boundaries
 - No exploit chains, no weaponized payloads

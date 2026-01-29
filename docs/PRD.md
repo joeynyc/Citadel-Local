@@ -1,4 +1,4 @@
-# PRD: RedTeam Local (Offline Repo Security Auditor)
+# PRD: Citadel Local (Offline Repo Security Auditor)
 
 Date: 2026-01-29
 
@@ -26,16 +26,16 @@ Developers accidentally ship vulnerabilities and secrets because security checks
 - No scanning of third-party systems
 
 ## Core workflows
-1. Developer runs `rtl scan <path>`
+1. Developer runs `citadel scan <path>`
 2. Tool inventories repo, runs detectors, creates evidence bundles
 3. Council labeling (triage -> deep -> skeptic)
 4. Tool outputs report artifacts
 
 ## CLI
-- `rtl scan <path> --out out/`
-- `rtl diff <path> --base origin/main`
-- `rtl baseline <path> --out baseline.json`
-- `rtl report <findings.json> --out report.md`
+- `citadel scan <path> --out out/`
+- `citadel diff <path> --base origin/main`
+- `citadel baseline <path> --out baseline.json`
+- `citadel report <findings.json> --out report.md`
 
 ## Output requirements
 - stable finding IDs

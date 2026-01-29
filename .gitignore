@@ -28,7 +28,7 @@ htmlcov/
 out/
 
 # Config (user-specific)
-.redteam-local.yaml
+.citadel-local.yaml
 
 # OS
 .DS_Store

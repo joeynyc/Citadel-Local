@@ -13,8 +13,8 @@ pytest -q
 ```
 
 ## Add a detector
-1. Add a module in `src/redteam_local/detectors/`
-2. Register it in `src/redteam_local/detectors/__init__.py`
+1. Add a module in `src/citadel_local/detectors/`
+2. Register it in `src/citadel_local/detectors/__init__.py`
 3. Add rule ids in `rules/*.yaml`
 4. Add test cases in `tests/`
 
