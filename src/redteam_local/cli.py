@@ -1,0 +1,67 @@
+import argparse
+from pathlib import Path
+from redteam_local.repo_scan.file_walk import collect_files
+from redteam_local.repo_scan.inventory import inventory_repo
+from redteam_local.detectors import run_detectors
+from redteam_local.reporting.report_json import write_findings_json
+from redteam_local.reporting.report_md import write_report_md
+from redteam_local.llm.council import run_council
+from redteam_local.config import load_config
+
+def cmd_scan(args: argparse.Namespace) -> int:
+    repo = Path(args.path).resolve()
+    out = Path(args.out).resolve()
+    out.mkdir(parents=True, exist_ok=True)
+
+    cfg = load_config(args.config)
+    files = collect_files(repo, cfg)
+    meta = inventory_repo(repo, files)
+    candidates = run_detectors(repo, files, cfg)
+
+    if cfg.get("ollama", {}).get("enabled", True):
+        findings = run_council(repo, meta, candidates, cfg)
+    else:
+        findings = candidates  # deterministic-only mode
+
+    findings_json = out / "findings.json"
+    report_md = out / "report.md"
+    write_findings_json(findings_json, repo, meta, findings)
+    write_report_md(report_md, repo, meta, findings)
+    print(f"Wrote: {findings_json}")
+    print(f"Wrote: {report_md}")
+    return 0
+
+def main() -> None:
+    p = argparse.ArgumentParser(prog="rtl")
+    sub = p.add_subparsers(dest="cmd", required=True)
+
+    scan = sub.add_parser("scan", help="Scan a repo folder")
+    scan.add_argument("path")
+    scan.add_argument("--out", default="out")
+    scan.add_argument("--config", default=".redteam-local.yaml")
+    scan.set_defaults(func=cmd_scan)
+
+    # Stubs for v1 roadmap
+    diff = sub.add_parser("diff", help="Scan only changed files vs git base (stub)")
+    diff.add_argument("path")
+    diff.add_argument("--base", default="origin/main")
+    diff.add_argument("--out", default="out")
+    diff.add_argument("--config", default=".redteam-local.yaml")
+    diff.set_defaults(func=lambda a: (print("diff: stub (implement git diff file set)"), 0)[1])
+
+    baseline = sub.add_parser("baseline", help="Record baseline findings (stub)")
+    baseline.add_argument("path")
+    baseline.add_argument("--out", default="baseline.json")
+    baseline.add_argument("--config", default=".redteam-local.yaml")
+    baseline.set_defaults(func=lambda a: (print("baseline: stub (write findings as baseline)"), 0)[1])
+
+    report = sub.add_parser("report", help="Render markdown report from findings.json (stub)")
+    report.add_argument("findings_json")
+    report.add_argument("--out", default="report.md")
+    report.set_defaults(func=lambda a: (print("report: stub (read findings.json and render md)"), 0)[1])
+
+    args = p.parse_args()
+    raise SystemExit(args.func(args))
+
+if __name__ == "__main__":
+    main()

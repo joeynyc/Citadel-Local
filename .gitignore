@@ -1,0 +1,35 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+*.egg
+dist/
+build/
+*.whl
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Testing / caching
+.pytest_cache/
+.ruff_cache/
+htmlcov/
+.coverage
+
+# Output
+out/
+
+# Config (user-specific)
+.redteam-local.yaml
+
+# OS
+.DS_Store
+Thumbs.db

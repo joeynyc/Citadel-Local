@@ -1,0 +1,11 @@
+# Starter rules for insecure patterns
+rules:
+  - id: injection.shell_call
+    description: Shell execution primitive; validate inputs and avoid shell=True
+    severity: medium
+  - id: injection.sql_concat
+    description: SQL concatenation can lead to injection if user input is included
+    severity: high
+  - id: crypto.weak_hash
+    description: md5/sha1 are weak for many security uses
+    severity: medium

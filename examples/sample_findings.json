@@ -1,0 +1,33 @@
+{
+  "schema_version": "1.0",
+  "scan": {
+    "repo_root": "/path/to/repo",
+    "timestamp": "2026-01-29T00:00:00Z",
+    "meta": {
+      "file_count": 3
+    }
+  },
+  "findings": [
+    {
+      "id": "secrets.aws_access_key_id:app/config.py:12",
+      "rule_id": "secrets.aws_access_key_id",
+      "category": "secrets",
+      "severity": "high",
+      "confidence": 0.8,
+      "title": "Possible secret detected",
+      "description": "A string matching a secret pattern was found.",
+      "evidence": {
+        "path": "app/config.py",
+        "start_line": 12,
+        "end_line": 12,
+        "snippet": "AWS_KEY='AKIA...'",
+        "context": "..."
+      },
+      "recommendation": [
+        "Rotate the credential.",
+        "Remove from git history.",
+        "Use env vars/secret manager."
+      ]
+    }
+  ]
+}
