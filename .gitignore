@@ -26,6 +26,7 @@ htmlcov/
 
 # Output
 out/
+out_test/
 
 # Config (user-specific)
 .citadel-local.yaml
