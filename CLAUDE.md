@@ -23,6 +23,9 @@ ruff format src/ tests/
 
 # Scan a repository
 citadel scan /path/to/repo --out out/ --config .citadel-local.yaml
+
+# Scan only changed files vs a git base branch
+citadel diff /path/to/repo --base origin/main --out out/
 ```
 
 ## Architecture
@@ -41,9 +44,9 @@ CLI (cli.py) → Config (config.py)
 
 ### Source layout (`src/citadel_local/`)
 
-- **cli.py** — Entry point. Subcommands: `scan`, `diff` (stub), `baseline` (stub), `report` (stub).
+- **cli.py** — Entry point. Subcommands: `scan`, `diff`, `baseline` (stub), `report` (stub).
 - **config.py** — Loads `.citadel-local.yaml`, merges with defaults.
-- **repo_scan/** — `file_walk.py` collects files (respects ignore patterns, max file size). `inventory.py` detects repo metadata.
+- **repo_scan/** — `file_walk.py` collects files (respects ignore patterns, max file size). `git_diff.py` collects only git-changed files for `citadel diff`. `inventory.py` detects repo metadata.
 - **detectors/** — Rule-based scanners. Each returns `list[dict]` of findings. Orchestrated by `detectors/__init__.py:run_detectors()`.
   - `secrets.py` — Regex + Shannon entropy for credentials/keys.
   - `injections.py` — Shell and SQL injection patterns.
