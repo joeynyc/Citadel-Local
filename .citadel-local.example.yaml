@@ -6,6 +6,7 @@ ignore:
   - build
   - vendor
   - .venv
+  - out_test
 
 max_file_mb: 2
 context_lines: 40
