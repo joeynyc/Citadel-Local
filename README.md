@@ -32,6 +32,11 @@ cp .citadel-local.example.yaml .citadel-local.yaml
 citadel scan /path/to/repo
 ```
 
+Or scan only changed files (great for PR checks):
+```bash
+citadel diff /path/to/repo --base origin/main
+```
+
 Outputs:
 - `out/findings.json` — structured findings for tooling integration
 - `out/report.md` — human-readable markdown report
@@ -42,8 +47,8 @@ Outputs:
 |---------|---------|----------|
 | `citadel scan <path>` | Full scan of a repo | Initial security audit, scheduled scans |
 | `citadel diff <path>` | Scan only changed files vs git base | PR checks, pre-commit hooks |
-| `citadel baseline <path>` | Record current findings as baseline | Acknowledge known issues, track deltas |
-| `citadel report <findings.json>` | Render markdown report from JSON | Re-format findings, share with team |
+| `citadel baseline <path>` | Record current findings as baseline (stub) | Acknowledge known issues, track deltas |
+| `citadel report <findings.json>` | Render markdown report from JSON (stub) | Re-format findings, share with team |
 
 ## Example output
 
