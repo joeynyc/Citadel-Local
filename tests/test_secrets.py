@@ -1,4 +1,3 @@
-from pathlib import Path
 from citadel_local.detectors.secrets import scan_secrets, shannon_entropy
 
 CFG = {"context_lines": 3}

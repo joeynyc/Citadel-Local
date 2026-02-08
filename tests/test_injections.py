@@ -1,4 +1,3 @@
-from pathlib import Path
 from citadel_local.detectors.injections import scan_injections
 
 CFG = {"context_lines": 3}

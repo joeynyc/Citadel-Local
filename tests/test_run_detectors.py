@@ -1,4 +1,3 @@
-from pathlib import Path
 from citadel_local.detectors import run_detectors
 
 CFG = {"context_lines": 3}

@@ -1,4 +1,3 @@
-from pathlib import Path
 from citadel_local.detectors.crypto import scan_crypto
 
 CFG = {"context_lines": 3}

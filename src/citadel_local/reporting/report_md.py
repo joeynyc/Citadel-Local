@@ -8,7 +8,7 @@ def _sev_rank(sev: str) -> int:
 def write_report_md(path: Path, repo_root: Path, meta: dict, findings: list[dict]) -> None:
     findings_sorted = sorted(findings, key=lambda f: (_sev_rank(f.get("severity","info")), -float(f.get("confidence",0.0))))
     lines = []
-    lines.append(f"# Security Report")
+    lines.append("# Security Report")
     lines.append("")
     lines.append(f"- Repo: `{repo_root}`")
     lines.append(f"- Generated: {datetime.utcnow().isoformat()}Z")
