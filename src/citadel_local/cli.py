@@ -1,6 +1,7 @@
 import argparse
 from pathlib import Path
 from citadel_local.repo_scan.file_walk import collect_files
+from citadel_local.repo_scan.git_diff import get_changed_files
 from citadel_local.repo_scan.inventory import inventory_repo
 from citadel_local.detectors import run_detectors
 from citadel_local.reporting.report_json import write_findings_json
@@ -31,6 +32,34 @@ def cmd_scan(args: argparse.Namespace) -> int:
     print(f"Wrote: {report_md}")
     return 0
 
+def cmd_diff(args: argparse.Namespace) -> int:
+    repo = Path(args.path).resolve()
+    out = Path(args.out).resolve()
+    out.mkdir(parents=True, exist_ok=True)
+
+    cfg = load_config(args.config)
+    files = get_changed_files(repo, args.base, cfg)
+    print(f"Changed files: {len(files)}")
+    if not files:
+        print("No changed files to scan.")
+        return 0
+
+    meta = inventory_repo(repo, files)
+    candidates = run_detectors(repo, files, cfg)
+
+    if cfg.get("ollama", {}).get("enabled", True):
+        findings = run_council(repo, meta, candidates, cfg)
+    else:
+        findings = candidates
+
+    findings_json = out / "findings.json"
+    report_md = out / "report.md"
+    write_findings_json(findings_json, repo, meta, findings)
+    write_report_md(report_md, repo, meta, findings)
+    print(f"Wrote: {findings_json}")
+    print(f"Wrote: {report_md}")
+    return 0
+
 def main() -> None:
     p = argparse.ArgumentParser(prog="citadel")
     sub = p.add_subparsers(dest="cmd", required=True)
@@ -42,12 +71,12 @@ def main() -> None:
     scan.set_defaults(func=cmd_scan)
 
     # Stubs for v1 roadmap
-    diff = sub.add_parser("diff", help="Scan only changed files vs git base (stub)")
+    diff = sub.add_parser("diff", help="Scan only changed files vs git base")
     diff.add_argument("path")
     diff.add_argument("--base", default="origin/main")
     diff.add_argument("--out", default="out")
     diff.add_argument("--config", default=".citadel-local.yaml")
-    diff.set_defaults(func=lambda a: (print("diff: stub (implement git diff file set)"), 0)[1])
+    diff.set_defaults(func=cmd_diff)
 
     baseline = sub.add_parser("baseline", help="Record baseline findings (stub)")
     baseline.add_argument("path")
